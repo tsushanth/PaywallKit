@@ -1,0 +1,4 @@
+module PaywallKit {
+    header "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallKit-Swift.h"
+    requires objc
+}

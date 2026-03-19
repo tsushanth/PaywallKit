@@ -1,0 +1,284 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.PaywallKit-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/sources",
+      "importPath" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Bridge/PaywallBridge.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/ABBucketer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/PaywallManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Models/PaywallConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/PaywallView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/WebPaywallViewController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "PaywallKit",
+      "moduleOutputPath" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/Modules/PaywallKit.swiftmodule",
+      "objects" : [
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallBridge.swift.o",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/ABBucketer.swift.o",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallManager.swift.o",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallConfig.swift.o",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallView.swift.o",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/WebPaywallViewController.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-module-cache-path",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallKit-Swift.h",
+        "-swift-version",
+        "5",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "paywallkit"
+      ],
+      "outputFileMapPath" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallBridge.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/ABBucketer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/WebPaywallViewController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/Modules/PaywallKit.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Bridge/PaywallBridge.swift",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/ABBucketer.swift",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/PaywallManager.swift",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Models/PaywallConfig.swift",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/PaywallView.swift",
+        "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/WebPaywallViewController.swift"
+      ],
+      "tempsPath" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "PaywallKit" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "PaywallKit",
+      "-package-name",
+      "paywallkit",
+      "-incremental",
+      "-c",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Bridge/PaywallBridge.swift",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/ABBucketer.swift",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/PaywallManager.swift",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Models/PaywallConfig.swift",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/PaywallView.swift",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/WebPaywallViewController.swift",
+      "-I",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-module-cache-path",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallKit-Swift.h",
+      "-swift-version",
+      "5",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "paywallkit",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "PaywallKit" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "writeCommands" : {
+    "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Bridge/PaywallBridge.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/ABBucketer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/PaywallManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Models/PaywallConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/PaywallView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/WebPaywallViewController.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/sources"
+    },
+    "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

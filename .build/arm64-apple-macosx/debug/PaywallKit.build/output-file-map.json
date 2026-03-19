@@ -1,0 +1,41 @@
+{
+  "": {
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/master.swiftdeps"
+  },
+  "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Bridge/PaywallBridge.swift": {
+    "dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallBridge.d",
+    "object": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallBridge.swift.o",
+    "swiftmodule": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallBridge~partial.swiftmodule",
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallBridge.swiftdeps"
+  },
+  "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/ABBucketer.swift": {
+    "dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/ABBucketer.d",
+    "object": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/ABBucketer.swift.o",
+    "swiftmodule": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/ABBucketer~partial.swiftmodule",
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/ABBucketer.swiftdeps"
+  },
+  "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Manager/PaywallManager.swift": {
+    "dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallManager.d",
+    "object": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallManager.swift.o",
+    "swiftmodule": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallManager.swiftdeps"
+  },
+  "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/Models/PaywallConfig.swift": {
+    "dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallConfig.d",
+    "object": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallConfig.swift.o",
+    "swiftmodule": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallConfig~partial.swiftmodule",
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallConfig.swiftdeps"
+  },
+  "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/PaywallView.swift": {
+    "dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallView.d",
+    "object": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallView.swift.o",
+    "swiftmodule": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallView~partial.swiftmodule",
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/PaywallView.swiftdeps"
+  },
+  "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/Sources/PaywallKit/View/WebPaywallViewController.swift": {
+    "dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/WebPaywallViewController.d",
+    "object": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/WebPaywallViewController.swift.o",
+    "swiftmodule": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/WebPaywallViewController~partial.swiftmodule",
+    "swift-dependencies": "/Users/sushanthtiruvaipati/Documents/GitHub/PaywallKit/.build/arm64-apple-macosx/debug/PaywallKit.build/WebPaywallViewController.swiftdeps"
+  }
+}
