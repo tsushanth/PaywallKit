@@ -44,6 +44,10 @@ public final class PaywallManager {
         }
     }
 
+    // Legal URLs — set globally, used by all templates
+    public var termsURL: URL? = URL(string: "https://kreativekoala.llc/terms")
+    public var privacyURL: URL? = URL(string: "https://kreativekoala.llc/privacy")
+
     // Legacy analytics handler (for Firebase/Mixpanel)
     public var analyticsHandler: ((_ event: String, _ params: [String: String]) -> Void)?
 }

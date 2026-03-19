@@ -11,6 +11,8 @@ public struct PaywallView: View {
     let onRestore: () async -> Void
     let onDismiss: () -> Void
     let showWinback: Bool
+    let termsURL: URL?
+    let privacyURL: URL?
 
     @State private var didPurchase = false
     @State private var showingWinback = false
@@ -25,6 +27,8 @@ public struct PaywallView: View {
         products: [PaywallProduct],
         theme: PaywallTheme = PaywallTheme(accent: .blue, accent2: .purple),
         showWinback: Bool = true,
+        termsURL: URL? = URL(string: "https://kreativekoala.llc/terms"),
+        privacyURL: URL? = URL(string: "https://kreativekoala.llc/privacy"),
         onPurchase: @escaping (String) async -> Void,
         onRestore: @escaping () async -> Void,
         onDismiss: @escaping () -> Void
@@ -35,6 +39,8 @@ public struct PaywallView: View {
         self.products = products
         self.theme = theme
         self.showWinback = showWinback
+        self.termsURL = termsURL
+        self.privacyURL = privacyURL
         self.onPurchase = onPurchase
         self.onRestore = onRestore
         self.onDismiss = onDismiss

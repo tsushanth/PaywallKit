@@ -145,9 +145,11 @@ struct CloseButton: View {
 
 struct LegalFooter: View {
     let trialDays: Int?
+    var termsURL: URL? = PaywallManager.shared.termsURL
+    var privacyURL: URL? = PaywallManager.shared.privacyURL
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 6) {
             if let days = trialDays, days > 0, days <= 30 {
                 Text("\(days)-day free trial, then auto-renews. Cancel anytime.")
                     .font(.system(size: 10))
@@ -156,6 +158,24 @@ struct LegalFooter: View {
                 Text("Recurring billing. Cancel anytime in Settings.")
                     .font(.system(size: 10))
                     .foregroundColor(Color.white.opacity(0.3))
+            }
+
+            HStack(spacing: 12) {
+                if let url = termsURL {
+                    Link("Terms of Use", destination: url)
+                        .font(.system(size: 10))
+                        .foregroundColor(Color.white.opacity(0.4))
+                }
+                if termsURL != nil && privacyURL != nil {
+                    Text("·")
+                        .font(.system(size: 10))
+                        .foregroundColor(Color.white.opacity(0.2))
+                }
+                if let url = privacyURL {
+                    Link("Privacy Policy", destination: url)
+                        .font(.system(size: 10))
+                        .foregroundColor(Color.white.opacity(0.4))
+                }
             }
         }
         .multilineTextAlignment(.center)

@@ -77,6 +77,7 @@ struct WinbackFeatureTemplate: View {
                             .font(.system(size: 13))
                             .foregroundColor(Color.white.opacity(0.25))
                     }
+                    LegalFooter(trialDays: bestProduct?.trialDays)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 34)

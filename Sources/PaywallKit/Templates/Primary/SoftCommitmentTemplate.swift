@@ -110,6 +110,7 @@ struct SoftCommitmentTemplate: View {
                     }
 
                     RestoreButton(action: onRestore)
+                    LegalFooter(trialDays: bestProduct?.trialDays)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 34)
