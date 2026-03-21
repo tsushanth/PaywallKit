@@ -21,9 +21,7 @@ struct WinbackLastChanceTemplate: View {
         ZStack(alignment: .topTrailing) {
             theme.background.ignoresSafeArea()
 
-            VStack {
-                Spacer()
-
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
                     Text("🎁")
                         .font(.system(size: 56))
@@ -70,26 +68,26 @@ struct WinbackLastChanceTemplate: View {
                     }
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(.secondary)
+
+                    VStack(spacing: 12) {
+                        CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                            guard let id = bestProduct?.id else { return }
+                            isPurchasing = true
+                            onPurchase(id)
+                        }
+                        Button(action: onClose) {
+                            Text("No thanks, I'll miss out")
+                                .font(.system(size: 13))
+                                .foregroundColor(Color.white.opacity(0.25))
+                        }
+                        LegalFooter(trialDays: bestProduct?.trialDays)
+                    }
                 }
                 .padding(.horizontal, 24)
-
-                Spacer()
-
-                VStack(spacing: 12) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = bestProduct?.id else { return }
-                        isPurchasing = true
-                        onPurchase(id)
-                    }
-                    Button(action: onClose) {
-                        Text("No thanks, I'll miss out")
-                            .font(.system(size: 13))
-                            .foregroundColor(Color.white.opacity(0.25))
-                    }
-                    LegalFooter(trialDays: bestProduct?.trialDays)
-                }
-                .padding(.horizontal, 20)
+                .padding(.top, 56)
                 .padding(.bottom, 34)
+                .frame(maxWidth: 500)
+                .frame(maxWidth: .infinity)
             }
 
             CloseButton(action: onClose)

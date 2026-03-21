@@ -12,7 +12,9 @@ public final class ExperimentManager: ObservableObject {
         static let primaryTemplate = "pwkit_primary_template"
         static let winbackTemplate = "pwkit_winback_template"
         static let serverOverride = "pwkit_server_override"
+        static let serverIsDismissible = "pwkit_server_dismissible"
         static let lastServerCheck = "pwkit_last_server_check"
+        static let impressionCount = "pwkit_impression_count"
     }
 
     // MARK: - User ID
@@ -60,6 +62,27 @@ public final class ExperimentManager: ObservableObject {
         return template
     }
 
+    // MARK: - Impression Tracking
+
+    /// Number of times the paywall has been shown for this app
+    public func impressionCount(appId: String) -> Int {
+        defaults.integer(forKey: "\(Keys.impressionCount)_\(appId)")
+    }
+
+    /// Increment impression count — called each time PaywallView is created
+    public func incrementImpressions(appId: String) {
+        let key = "\(Keys.impressionCount)_\(appId)"
+        defaults.set(defaults.integer(forKey: key) + 1, forKey: key)
+    }
+
+    /// Whether the paywall should be dismissible — server can override to false for hard paywall
+    public func isDismissible() -> Bool {
+        if defaults.object(forKey: Keys.serverIsDismissible) != nil {
+            return defaults.bool(forKey: Keys.serverIsDismissible)
+        }
+        return true // default: dismissible
+    }
+
     // MARK: - Server Override
 
     /// Check server for template override (fire-and-forget, non-blocking)
@@ -76,10 +99,12 @@ public final class ExperimentManager: ObservableObject {
     private func fetchOverride(appId: String) async {
         let apiBase = PaywallManager.shared.apiBase
         guard var components = URLComponents(string: "\(apiBase)/resolve") else { return }
+        let impressions = await MainActor.run { impressionCount(appId: appId) }
         components.queryItems = [
             URLQueryItem(name: "app", value: appId),
             URLQueryItem(name: "placement", value: "onboarding"),
             URLQueryItem(name: "userId", value: userId),
+            URLQueryItem(name: "impressions", value: String(impressions)),
         ]
         guard let url = components.url else { return }
         var request = URLRequest(url: url, timeoutInterval: 5)
@@ -96,6 +121,9 @@ public final class ExperimentManager: ObservableObject {
                 }
                 if let winback = json["winbackTemplate"] as? String {
                     self.defaults.set(winback, forKey: Keys.serverOverride + "_winback")
+                }
+                if let dismissible = json["isDismissible"] as? Bool {
+                    self.defaults.set(dismissible, forKey: Keys.serverIsDismissible)
                 }
                 self.defaults.set(Date(), forKey: Keys.lastServerCheck)
             }

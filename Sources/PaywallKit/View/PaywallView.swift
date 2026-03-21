@@ -11,6 +11,7 @@ public struct PaywallView: View {
     let onRestore: () async -> Void
     let onDismiss: () -> Void
     let showWinback: Bool
+    let isDismissible: Bool
     let termsURL: URL?
     let privacyURL: URL?
 
@@ -27,6 +28,7 @@ public struct PaywallView: View {
         products: [PaywallProduct],
         theme: PaywallTheme = PaywallTheme(accent: .blue, accent2: .purple),
         showWinback: Bool = true,
+        isDismissible: Bool = true,
         termsURL: URL? = URL(string: "https://kreativekoala.llc/terms"),
         privacyURL: URL? = URL(string: "https://kreativekoala.llc/privacy"),
         onPurchase: @escaping (String) async -> Void,
@@ -39,6 +41,7 @@ public struct PaywallView: View {
         self.products = products
         self.theme = theme
         self.showWinback = showWinback
+        self.isDismissible = isDismissible
         self.termsURL = termsURL
         self.privacyURL = privacyURL
         self.onPurchase = onPurchase
@@ -48,6 +51,9 @@ public struct PaywallView: View {
         let em = ExperimentManager.shared
         self.primaryTemplate = em.primaryTemplate()
         self.winbackTemplate = em.winbackTemplate()
+
+        // Track impression count for this placement
+        em.incrementImpressions(appId: appId)
     }
 
     public var body: some View {
@@ -97,6 +103,11 @@ public struct PaywallView: View {
                 appName: appName, features: features, products: products,
                 theme: theme, onPurchase: handlePurchase, onRestore: handleRestore,
                 onClose: handleClose)
+        case .trialGate:
+            TrialGateTemplate(
+                appName: appName, features: features, products: products,
+                theme: theme, onPurchase: handlePurchase, onRestore: handleRestore,
+                onClose: handleClose, isDismissible: isDismissible)
         }
     }
 
@@ -117,6 +128,16 @@ public struct PaywallView: View {
                 onClose: handleWinbackClose)
         case .discountOffer:
             WinbackDiscountTemplate(
+                appName: appName, features: features, products: products,
+                theme: theme, onPurchase: handleWinbackPurchase,
+                onClose: handleWinbackClose)
+        case .scratchCard:
+            WinbackScratchCardTemplate(
+                appName: appName, features: features, products: products,
+                theme: theme, onPurchase: handleWinbackPurchase,
+                onClose: handleWinbackClose)
+        case .spinWheel:
+            WinbackSpinWheelTemplate(
                 appName: appName, features: features, products: products,
                 theme: theme, onPurchase: handleWinbackPurchase,
                 onClose: handleWinbackClose)
@@ -142,6 +163,7 @@ public struct PaywallView: View {
     }
 
     private func handleClose() {
+        guard isDismissible else { return }
         PaywallManager.shared.trackEvent(
             appId: appId, placement: "onboarding",
             templateId: primaryTemplate.rawValue, event: "closed")

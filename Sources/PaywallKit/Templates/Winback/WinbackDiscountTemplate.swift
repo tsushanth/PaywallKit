@@ -26,9 +26,7 @@ struct WinbackDiscountTemplate: View {
         ZStack(alignment: .topTrailing) {
             theme.background.ignoresSafeArea()
 
-            VStack {
-                Spacer()
-
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 28) {
                     // Discount badge
                     Text("EXCLUSIVE OFFER")
@@ -88,26 +86,26 @@ struct WinbackDiscountTemplate: View {
                             }
                         }
                     }
+
+                    VStack(spacing: 12) {
+                        CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                            guard let id = bestProduct?.id else { return }
+                            isPurchasing = true
+                            onPurchase(id)
+                        }
+                        Button(action: onClose) {
+                            Text("I don't want 50% off")
+                                .font(.system(size: 13))
+                                .foregroundColor(Color.white.opacity(0.25))
+                        }
+                        LegalFooter(trialDays: bestProduct?.trialDays)
+                    }
                 }
                 .padding(.horizontal, 24)
-
-                Spacer()
-
-                VStack(spacing: 12) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = bestProduct?.id else { return }
-                        isPurchasing = true
-                        onPurchase(id)
-                    }
-                    Button(action: onClose) {
-                        Text("I don't want 50% off")
-                            .font(.system(size: 13))
-                            .foregroundColor(Color.white.opacity(0.25))
-                    }
-                    LegalFooter(trialDays: bestProduct?.trialDays)
-                }
-                .padding(.horizontal, 20)
+                .padding(.top, 56)
                 .padding(.bottom, 34)
+                .frame(maxWidth: 500)
+                .frame(maxWidth: .infinity)
             }
 
             CloseButton(action: onClose)

@@ -19,87 +19,85 @@ struct ValueStackTemplate: View {
         ZStack(alignment: .topTrailing) {
             theme.background.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 24) {
-                        // Header with gradient text
-                        VStack(spacing: 8) {
-                            Text("Unlock \(appName)")
-                                .font(.system(size: 28, weight: .heavy))
-                                .foregroundColor(.white)
-                            Text("Everything included. No limits.")
-                                .font(.system(size: 15))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.top, 56)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 24) {
+                    // Header with gradient text
+                    VStack(spacing: 8) {
+                        Text("Unlock \(appName)")
+                            .font(.system(size: 28, weight: .heavy))
+                            .foregroundColor(.white)
+                        Text("Everything included. No limits.")
+                            .font(.system(size: 15))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 56)
 
-                        // Value stack — each feature is a "thing you get"
-                        VStack(spacing: 0) {
-                            ForEach(Array(features.enumerated()), id: \.element.title) { idx, feat in
-                                HStack(spacing: 14) {
-                                    Text(feat.icon)
-                                        .font(.system(size: 22))
-                                        .frame(width: 44, height: 44)
-                                        .background(theme.accent.opacity(0.1))
-                                        .cornerRadius(12)
+                    // Value stack — each feature is a "thing you get"
+                    VStack(spacing: 0) {
+                        ForEach(Array(features.enumerated()), id: \.element.title) { idx, feat in
+                            HStack(spacing: 14) {
+                                Text(feat.icon)
+                                    .font(.system(size: 22))
+                                    .frame(width: 44, height: 44)
+                                    .background(theme.accent.opacity(0.1))
+                                    .cornerRadius(12)
 
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(feat.title)
-                                            .font(.system(size: 15, weight: .bold))
-                                            .foregroundColor(.white)
-                                        if !feat.description.isEmpty {
-                                            Text(feat.description)
-                                                .font(.system(size: 12))
-                                                .foregroundColor(.secondary)
-                                        }
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(feat.title)
+                                        .font(.system(size: 15, weight: .bold))
+                                        .foregroundColor(.white)
+                                    if !feat.description.isEmpty {
+                                        Text(feat.description)
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.secondary)
                                     }
-
-                                    Spacer()
-
-                                    Image(systemName: "checkmark")
-                                        .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(theme.accent)
                                 }
-                                .padding(.vertical, 14)
-                                .padding(.horizontal, 16)
 
-                                if idx < features.count - 1 {
-                                    Divider()
-                                        .background(Color.white.opacity(0.06))
-                                        .padding(.horizontal, 16)
-                                }
+                                Spacer()
+
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(theme.accent)
                             }
-                        }
-                        .background(theme.cardBackground)
-                        .cornerRadius(16)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.white.opacity(0.06), lineWidth: 1))
+                            .padding(.vertical, 14)
+                            .padding(.horizontal, 16)
 
-                        // Products
-                        HStack(spacing: 10) {
-                            ForEach(sortedProducts, id: \.id) { product in
-                                ProductCard(product: product, isSelected: product.id == selectedId,
-                                            theme: theme, onTap: { selectedId = product.id })
+                            if idx < features.count - 1 {
+                                Divider()
+                                    .background(Color.white.opacity(0.06))
+                                    .padding(.horizontal, 16)
                             }
                         }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 16)
-                }
+                    .background(theme.cardBackground)
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.white.opacity(0.06), lineWidth: 1))
 
-                VStack(spacing: 10) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = selectedId else { return }
-                        isPurchasing = true
-                        onPurchase(id)
+                    // Products
+                    HStack(spacing: 10) {
+                        ForEach(sortedProducts, id: \.id) { product in
+                            ProductCard(product: product, isSelected: product.id == selectedId,
+                                        theme: theme, onTap: { selectedId = product.id })
+                        }
                     }
-                    RestoreButton(action: onRestore)
-                    LegalFooter(trialDays: selectedProduct?.trialDays)
+
+                    // CTA
+                    VStack(spacing: 10) {
+                        CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                            guard let id = selectedId else { return }
+                            isPurchasing = true
+                            onPurchase(id)
+                        }
+                        RestoreButton(action: onRestore)
+                        LegalFooter(trialDays: selectedProduct?.trialDays)
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 34)
-                .padding(.top, 8)
+                .frame(maxWidth: 500)
+                .frame(maxWidth: .infinity)
             }
 
             CloseButton(action: onClose)

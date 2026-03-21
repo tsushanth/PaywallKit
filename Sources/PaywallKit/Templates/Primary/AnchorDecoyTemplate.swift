@@ -30,75 +30,72 @@ struct AnchorDecoyTemplate: View {
         ZStack(alignment: .topTrailing) {
             theme.background.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 28) {
-                        // Header
-                        VStack(spacing: 10) {
-                            Image(systemName: "crown.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(
-                                    LinearGradient(colors: [theme.accent, theme.accent2],
-                                                   startPoint: .topLeading, endPoint: .bottomTrailing))
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 28) {
+                    // Header
+                    VStack(spacing: 10) {
+                        Image(systemName: "crown.fill")
+                            .font(.system(size: 44))
+                            .foregroundStyle(
+                                LinearGradient(colors: [theme.accent, theme.accent2],
+                                               startPoint: .topLeading, endPoint: .bottomTrailing))
 
-                            Text("Upgrade to \(appName)")
-                                .font(.system(size: 26, weight: .heavy))
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding(.top, 56)
-
-                        // Plan cards — annual is hero, monthly is anchor
-                        VStack(spacing: 12) {
-                            // Annual — highlighted
-                            if let y = yearly {
-                                planCard(product: y, isRecommended: true)
-                            }
-                            // Monthly — anchor (expensive per month)
-                            if let m = monthly {
-                                planCard(product: m, isRecommended: false)
-                            }
-                            // Lifetime if available
-                            if let lt = products.first(where: { $0.period == .lifetime }) {
-                                planCard(product: lt, isRecommended: false)
-                            }
-                        }
-
-                        // Compact feature checks
-                        VStack(alignment: .leading, spacing: 10) {
-                            ForEach(features.prefix(5), id: \.title) { feat in
-                                HStack(spacing: 10) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(theme.accent)
-                                        .font(.system(size: 16))
-                                    Text(feat.title)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.white)
-                                    Spacer()
-                                }
-                            }
-                        }
-                        .padding(16)
-                        .background(theme.cardBackground)
-                        .cornerRadius(16)
+                        Text("Upgrade to \(appName)")
+                            .font(.system(size: 26, weight: .heavy))
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 16)
-                }
+                    .padding(.top, 56)
 
-                // Sticky CTA
-                VStack(spacing: 10) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = selectedId else { return }
-                        isPurchasing = true
-                        onPurchase(id)
+                    // Plan cards — annual is hero, monthly is anchor
+                    VStack(spacing: 12) {
+                        // Annual — highlighted
+                        if let y = yearly {
+                            planCard(product: y, isRecommended: true)
+                        }
+                        // Monthly — anchor (expensive per month)
+                        if let m = monthly {
+                            planCard(product: m, isRecommended: false)
+                        }
+                        // Lifetime if available
+                        if let lt = products.first(where: { $0.period == .lifetime }) {
+                            planCard(product: lt, isRecommended: false)
+                        }
                     }
-                    RestoreButton(action: onRestore)
-                    LegalFooter(trialDays: selectedProduct?.trialDays)
+
+                    // Compact feature checks
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(features.prefix(5), id: \.title) { feat in
+                            HStack(spacing: 10) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(theme.accent)
+                                    .font(.system(size: 16))
+                                Text(feat.title)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.white)
+                                Spacer()
+                            }
+                        }
+                    }
+                    .padding(16)
+                    .background(theme.cardBackground)
+                    .cornerRadius(16)
+
+                    // CTA
+                    VStack(spacing: 10) {
+                        CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                            guard let id = selectedId else { return }
+                            isPurchasing = true
+                            onPurchase(id)
+                        }
+                        RestoreButton(action: onRestore)
+                        LegalFooter(trialDays: selectedProduct?.trialDays)
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 34)
-                .padding(.top, 8)
+                .frame(maxWidth: 500)
+                .frame(maxWidth: .infinity)
             }
 
             CloseButton(action: onClose)

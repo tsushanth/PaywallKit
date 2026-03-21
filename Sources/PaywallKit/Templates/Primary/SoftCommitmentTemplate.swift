@@ -15,7 +15,6 @@ struct SoftCommitmentTemplate: View {
     @State private var isPurchasing = false
 
     private var bestProduct: PaywallProduct? {
-        // Prefer product with trial
         products.first { $0.trialDays != nil && ($0.trialDays ?? 0) > 0 }
             ?? products.first { $0.period == .yearly }
             ?? products.first
@@ -25,9 +24,7 @@ struct SoftCommitmentTemplate: View {
         ZStack(alignment: .topTrailing) {
             theme.background.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                Spacer()
-
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 32) {
                     // Friendly icon
                     ZStack {
@@ -90,30 +87,30 @@ struct SoftCommitmentTemplate: View {
                         }
                     }
                     .padding(.horizontal, 8)
+
+                    // CTA area
+                    VStack(spacing: 10) {
+                        CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                            guard let id = bestProduct?.id else { return }
+                            isPurchasing = true
+                            onPurchase(id)
+                        }
+
+                        if let p = bestProduct {
+                            Text("Then \(p.localizedPrice)/\(periodShort(p)) · Cancel anytime")
+                                .font(.system(size: 12))
+                                .foregroundColor(.secondary)
+                        }
+
+                        RestoreButton(action: onRestore)
+                        LegalFooter(trialDays: bestProduct?.trialDays)
+                    }
                 }
                 .padding(.horizontal, 24)
-
-                Spacer()
-
-                // CTA area
-                VStack(spacing: 10) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = bestProduct?.id else { return }
-                        isPurchasing = true
-                        onPurchase(id)
-                    }
-
-                    if let p = bestProduct {
-                        Text("Then \(p.localizedPrice)/\(periodShort(p)) · Cancel anytime")
-                            .font(.system(size: 12))
-                            .foregroundColor(.secondary)
-                    }
-
-                    RestoreButton(action: onRestore)
-                    LegalFooter(trialDays: bestProduct?.trialDays)
-                }
-                .padding(.horizontal, 20)
+                .padding(.top, 56)
                 .padding(.bottom, 34)
+                .frame(maxWidth: 500)
+                .frame(maxWidth: .infinity)
             }
 
             CloseButton(action: onClose)

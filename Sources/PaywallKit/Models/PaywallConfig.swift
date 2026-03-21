@@ -65,10 +65,13 @@ public enum PrimaryTemplate: String, CaseIterable, Codable, Sendable {
     case socialProof       // Flo/YAZIO: User counts, star ratings, testimonials
     case softCommitment    // Strava/Cal AI: Trial-focused, "Cancel anytime", low-risk messaging
     case nowOrNever        // Captions/Finch: Countdown timer, big discount banner, urgency
+    case trialGate         // Hard paywall: yearly trial only, no close button, payment method required
 }
 
 public enum WinbackTemplate: String, CaseIterable, Codable, Sendable {
     case lastChance        // Urgency + single best offer
     case featureReminder   // "Here's what you're missing" + feature cards
     case discountOffer     // Post-close welcome offer with 24hr timer (Adapty pattern)
+    case scratchCard       // Gamified golden ticket scratch-to-reveal
+    case spinWheel         // Gamified spin-the-wheel with spring animation
 }

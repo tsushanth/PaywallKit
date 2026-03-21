@@ -113,23 +113,23 @@ struct SocialProofTemplate: View {
                                             theme: theme, onTap: { selectedId = product.id })
                             }
                         }
+
+                        // CTA
+                        VStack(spacing: 10) {
+                            CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                                guard let id = selectedId else { return }
+                                isPurchasing = true
+                                onPurchase(id)
+                            }
+                            RestoreButton(action: onRestore)
+                            LegalFooter(trialDays: selectedProduct?.trialDays)
+                        }
                     }
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 34)
+                    .frame(maxWidth: 500)
+                    .frame(maxWidth: .infinity)
                 }
-
-                VStack(spacing: 10) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = selectedId else { return }
-                        isPurchasing = true
-                        onPurchase(id)
-                    }
-                    RestoreButton(action: onRestore)
-                    LegalFooter(trialDays: selectedProduct?.trialDays)
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 34)
-                .padding(.top, 8)
             }
 
             CloseButton(action: onClose)

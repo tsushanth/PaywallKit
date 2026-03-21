@@ -21,67 +21,65 @@ struct WinbackFeatureTemplate: View {
         ZStack(alignment: .topTrailing) {
             theme.background.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 20) {
-                        VStack(spacing: 8) {
-                            Text("You're missing out on")
-                                .font(.system(size: 15))
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    VStack(spacing: 8) {
+                        Text("You're missing out on")
+                            .font(.system(size: 15))
+                            .foregroundColor(.secondary)
+                        Text("\(appName)")
+                            .font(.system(size: 26, weight: .heavy))
+                            .foregroundStyle(
+                                LinearGradient(colors: [theme.accent, theme.accent2],
+                                               startPoint: .leading, endPoint: .trailing))
+                    }
+                    .padding(.top, 56)
+
+                    VStack(spacing: 10) {
+                        ForEach(features.prefix(5), id: \.title) { feat in
+                            FeatureRow(feature: feat, theme: theme)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 12)
+                                .background(theme.cardBackground)
+                                .cornerRadius(14)
+                        }
+                    }
+
+                    if let product = bestProduct {
+                        VStack(spacing: 6) {
+                            Text(product.localizedPrice)
+                                .font(.system(size: 36, weight: .heavy))
+                                .foregroundColor(.white)
+                            Text(periodText(product))
+                                .font(.system(size: 13))
                                 .foregroundColor(.secondary)
-                            Text("\(appName)")
-                                .font(.system(size: 26, weight: .heavy))
-                                .foregroundStyle(
-                                    LinearGradient(colors: [theme.accent, theme.accent2],
-                                                   startPoint: .leading, endPoint: .trailing))
                         }
-                        .padding(.top, 56)
+                        .padding(20)
+                        .frame(maxWidth: .infinity)
+                        .background(theme.cardBackground)
+                        .overlay(RoundedRectangle(cornerRadius: 18).stroke(theme.accent, lineWidth: 1.5))
+                        .cornerRadius(18)
+                    }
 
-                        VStack(spacing: 10) {
-                            ForEach(features.prefix(5), id: \.title) { feat in
-                                FeatureRow(feature: feat, theme: theme)
-                                    .padding(.horizontal, 14)
-                                    .padding(.vertical, 12)
-                                    .background(theme.cardBackground)
-                                    .cornerRadius(14)
-                            }
+                    // CTA
+                    VStack(spacing: 12) {
+                        CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
+                            guard let id = bestProduct?.id else { return }
+                            isPurchasing = true
+                            onPurchase(id)
                         }
-
-                        if let product = bestProduct {
-                            VStack(spacing: 6) {
-                                Text(product.localizedPrice)
-                                    .font(.system(size: 36, weight: .heavy))
-                                    .foregroundColor(.white)
-                                Text(periodText(product))
-                                    .font(.system(size: 13))
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(20)
-                            .frame(maxWidth: .infinity)
-                            .background(theme.cardBackground)
-                            .overlay(RoundedRectangle(cornerRadius: 18).stroke(theme.accent, lineWidth: 1.5))
-                            .cornerRadius(18)
+                        Button(action: onClose) {
+                            Text("No thanks")
+                                .font(.system(size: 13))
+                                .foregroundColor(Color.white.opacity(0.25))
                         }
+                        LegalFooter(trialDays: bestProduct?.trialDays)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 16)
-                }
-
-                VStack(spacing: 12) {
-                    CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
-                        guard let id = bestProduct?.id else { return }
-                        isPurchasing = true
-                        onPurchase(id)
-                    }
-                    Button(action: onClose) {
-                        Text("No thanks")
-                            .font(.system(size: 13))
-                            .foregroundColor(Color.white.opacity(0.25))
-                    }
-                    LegalFooter(trialDays: bestProduct?.trialDays)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 34)
-                .padding(.top, 12)
+                .frame(maxWidth: 500)
+                .frame(maxWidth: .infinity)
             }
 
             CloseButton(action: onClose)
