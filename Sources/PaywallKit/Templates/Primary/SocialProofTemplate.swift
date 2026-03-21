@@ -49,7 +49,7 @@ struct SocialProofTemplate: View {
 
                             Text("Join thousands who upgraded and\nnever looked back.")
                                 .font(.system(size: 14))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                                 .multilineTextAlignment(.center)
                         }
                         .padding(.top, 56)
@@ -75,7 +75,7 @@ struct SocialProofTemplate: View {
 
                                     Text("— \(review.author)")
                                         .font(.system(size: 12, weight: .medium))
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.white.opacity(0.7))
                                 }
                                 .padding(16)
                                 .frame(maxWidth: .infinity, alignment: .leading)

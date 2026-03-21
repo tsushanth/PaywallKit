@@ -140,7 +140,7 @@ struct AnchorDecoyTemplate: View {
                     } else if product.period == .lifetime {
                         Text("One-time purchase")
                             .font(.system(size: 12))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
                     }
 
                     if let days = product.trialDays, days > 0, days <= 30 {

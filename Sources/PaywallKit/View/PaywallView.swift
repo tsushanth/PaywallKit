@@ -65,6 +65,7 @@ public struct PaywallView: View {
                 primaryView
             }
         }
+        .interactiveDismissDisabled(!isDismissible)
         .onAppear {
             PaywallManager.shared.trackEvent(
                 appId: appId, placement: "onboarding",
@@ -163,18 +164,19 @@ public struct PaywallView: View {
     }
 
     private func handleClose() {
-        guard isDismissible else { return }
         PaywallManager.shared.trackEvent(
             appId: appId, placement: "onboarding",
             templateId: primaryTemplate.rawValue, event: "closed")
         if !didPurchase && showWinback {
+            // Always allow transition to winback, even when not dismissible
             PaywallManager.shared.trackEvent(
                 appId: appId, placement: "winback",
                 templateId: winbackTemplate.rawValue, event: "winback_shown")
             withAnimation(.easeInOut(duration: 0.3)) { showingWinback = true }
-        } else {
+        } else if isDismissible {
             onDismiss()
         }
+        // If not dismissible and no winback, do nothing — user must subscribe
     }
 
     private func handleWinbackPurchase(_ productId: String) {
@@ -186,6 +188,7 @@ public struct PaywallView: View {
     }
 
     private func handleWinbackClose() {
+        guard isDismissible else { return } // Can't dismiss winback when not dismissible
         PaywallManager.shared.trackEvent(
             appId: appId, placement: "winback",
             templateId: winbackTemplate.rawValue, event: "winback_closed")

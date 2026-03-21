@@ -58,7 +58,7 @@ struct TrialGateTemplate: View {
 
                         Text("Try everything free. Cancel anytime.")
                             .font(.system(size: 16))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
                     }
 
                     // Trust badges
@@ -105,11 +105,11 @@ struct TrialGateTemplate: View {
                             if let days = p.trialDays, days > 0 {
                                 Text("\(days) days free, then \(p.localizedPrice)/year")
                                     .font(.system(size: 13, weight: .medium))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.white.opacity(0.7))
                             } else {
                                 Text("\(p.localizedPrice)/year")
                                     .font(.system(size: 13, weight: .medium))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.white.opacity(0.7))
                             }
                         }
 
@@ -143,7 +143,7 @@ struct TrialGateTemplate: View {
                 .foregroundColor(theme.accent)
             Text(text)
                 .font(.system(size: 10, weight: .medium))
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.7))
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -162,7 +162,7 @@ struct TrialGateTemplate: View {
                     .foregroundColor(.white)
                 Text(subtitle)
                     .font(.system(size: 12))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
             }
             Spacer()
         }

@@ -133,7 +133,7 @@ struct NowOrNeverTemplate: View {
                 .foregroundColor(.white)
             Text(label)
                 .font(.system(size: 9, weight: .bold))
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.7))
                 .tracking(1)
         }
     }

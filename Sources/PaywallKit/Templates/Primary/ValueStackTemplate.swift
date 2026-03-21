@@ -28,7 +28,7 @@ struct ValueStackTemplate: View {
                             .foregroundColor(.white)
                         Text("Everything included. No limits.")
                             .font(.system(size: 15))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
                     }
                     .padding(.top, 56)
 
@@ -49,7 +49,7 @@ struct ValueStackTemplate: View {
                                     if !feat.description.isEmpty {
                                         Text(feat.description)
                                             .font(.system(size: 12))
-                                            .foregroundColor(.secondary)
+                                            .foregroundColor(.white.opacity(0.7))
                                     }
                                 }
 

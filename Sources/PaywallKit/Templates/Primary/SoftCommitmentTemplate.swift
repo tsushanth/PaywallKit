@@ -53,7 +53,7 @@ struct SoftCommitmentTemplate: View {
 
                         Text("No commitment. Cancel anytime.")
                             .font(.system(size: 15))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
                     }
 
                     // Trial timeline
@@ -99,7 +99,7 @@ struct SoftCommitmentTemplate: View {
                         if let p = bestProduct {
                             Text("Then \(p.localizedPrice)/\(periodShort(p)) · Cancel anytime")
                                 .font(.system(size: 12))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                         }
 
                         RestoreButton(action: onRestore)
@@ -132,7 +132,7 @@ struct SoftCommitmentTemplate: View {
                     .foregroundColor(.white)
                 Text(subtitle)
                     .font(.system(size: 12))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
             }
             Spacer()
         }

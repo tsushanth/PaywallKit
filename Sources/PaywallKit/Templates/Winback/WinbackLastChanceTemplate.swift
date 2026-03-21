@@ -32,7 +32,7 @@ struct WinbackLastChanceTemplate: View {
                             .foregroundColor(.white)
                         Text("You're about to lose access to Premium features.")
                             .font(.system(size: 14))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
                             .multilineTextAlignment(.center)
                     }
 
@@ -43,7 +43,7 @@ struct WinbackLastChanceTemplate: View {
                                 .foregroundColor(.white)
                             Text(periodText(product))
                                 .font(.system(size: 13))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                             if let days = product.trialDays, days > 0, days <= 30 {
                                 HStack(spacing: 4) {
                                     Image(systemName: "checkmark.circle.fill")
@@ -67,7 +67,7 @@ struct WinbackLastChanceTemplate: View {
                         Label("4.8★", systemImage: "star.fill")
                     }
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
 
                     VStack(spacing: 12) {
                         CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {

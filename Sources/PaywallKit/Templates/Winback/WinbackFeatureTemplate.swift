@@ -26,7 +26,7 @@ struct WinbackFeatureTemplate: View {
                     VStack(spacing: 8) {
                         Text("You're missing out on")
                             .font(.system(size: 15))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
                         Text("\(appName)")
                             .font(.system(size: 26, weight: .heavy))
                             .foregroundStyle(
@@ -52,7 +52,7 @@ struct WinbackFeatureTemplate: View {
                                 .foregroundColor(.white)
                             Text(periodText(product))
                                 .font(.system(size: 13))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                         }
                         .padding(20)
                         .frame(maxWidth: .infinity)

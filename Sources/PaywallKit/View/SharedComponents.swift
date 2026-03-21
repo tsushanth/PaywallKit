@@ -34,7 +34,7 @@ struct ProductCard: View {
 
                 Text(product.period.rawValue.capitalized)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
                     .textCase(.uppercase)
 
                 Text(product.localizedPrice)
@@ -43,7 +43,7 @@ struct ProductCard: View {
 
                 Text(periodLabel)
                     .font(.system(size: 11))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
@@ -119,7 +119,7 @@ struct FeatureRow: View {
                 if !feature.description.isEmpty {
                     Text(feature.description)
                         .font(.system(size: 12))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white.opacity(0.7))
                 }
             }
 
@@ -135,7 +135,7 @@ struct CloseButton: View {
         Button(action: action) {
             Image(systemName: "xmark")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.7))
                 .frame(width: 30, height: 30)
                 .background(Color.white.opacity(0.08))
                 .clipShape(Circle())
@@ -190,7 +190,7 @@ struct RestoreButton: View {
         Button(action: action) {
             Text("Restore Purchases")
                 .font(.system(size: 14))
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.7))
         }
     }
 }

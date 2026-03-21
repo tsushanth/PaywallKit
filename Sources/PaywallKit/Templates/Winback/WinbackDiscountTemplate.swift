@@ -51,17 +51,17 @@ struct WinbackDiscountTemplate: View {
                     VStack(spacing: 6) {
                         Text("Offer expires in")
                             .font(.system(size: 12))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.white.opacity(0.7))
 
                         HStack(spacing: 8) {
                             countdownUnit(value: timeRemaining / 3600, label: "hr")
                             Text(":")
                                 .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                             countdownUnit(value: (timeRemaining % 3600) / 60, label: "min")
                             Text(":")
                                 .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                             countdownUnit(value: timeRemaining % 60, label: "sec")
                         }
                     }
@@ -77,7 +77,7 @@ struct WinbackDiscountTemplate: View {
                                 .foregroundColor(.white)
                             Text(periodText(product))
                                 .font(.system(size: 13))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.7))
                             if let days = product.trialDays, days > 0, days <= 30 {
                                 Text("Includes \(days)-day free trial")
                                     .font(.system(size: 13, weight: .semibold))
@@ -125,7 +125,7 @@ struct WinbackDiscountTemplate: View {
                 .foregroundColor(.white)
             Text(label)
                 .font(.system(size: 9, weight: .medium))
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.7))
         }
     }
 
