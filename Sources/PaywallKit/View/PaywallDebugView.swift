@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Drop-in debug menu for testing paywall templates.
-/// Shows template pickers + a "Show Paywall" button that presents the selected combination.
+/// Uses StoreManager for real StoreKit 2 products when available, falls back to mocks.
 ///
 /// Usage in any app's settings:
 /// ```swift
@@ -10,10 +10,7 @@ import SwiftUI
 ///     appId: "clearvoice",
 ///     appName: "ClearVoice Pro",
 ///     features: [...],
-///     products: paywallProducts,
-///     theme: myTheme,
-///     onPurchase: { id in ... },
-///     onRestore: { ... }
+///     theme: myTheme
 /// )
 /// #endif
 /// ```
@@ -21,56 +18,70 @@ public struct PaywallDebugView: View {
     let appId: String
     let appName: String
     let features: [PaywallFeature]
-    let products: [PaywallProduct]
     let theme: PaywallTheme
-    let onPurchase: (String) async -> Void
-    let onRestore: () async -> Void
 
     @State private var selectedPrimary: PrimaryTemplate = .valueStack
     @State private var selectedWinback: WinbackTemplate = .featureReminder
     @State private var isDismissible = true
     @State private var showPaywall = false
 
+    @ObservedObject private var store = StoreManager.shared
     private let em = ExperimentManager.shared
 
     public init(
         appId: String,
         appName: String,
         features: [PaywallFeature],
-        products: [PaywallProduct],
-        theme: PaywallTheme,
-        onPurchase: @escaping (String) async -> Void,
-        onRestore: @escaping () async -> Void
+        theme: PaywallTheme
     ) {
         self.appId = appId
         self.appName = appName
         self.features = features
-        self.products = products
         self.theme = theme
-        self.onPurchase = onPurchase
-        self.onRestore = onRestore
+    }
+
+    private var products: [PaywallProduct] {
+        if store.paywallProducts.isEmpty {
+            // Mock products when StoreManager not configured
+            return [
+                PaywallProduct(id: "weekly", localizedPrice: "$1.99", price: 1.99, currencyCode: "USD", trialDays: 3, period: .weekly),
+                PaywallProduct(id: "monthly", localizedPrice: "$4.99", price: 4.99, currencyCode: "USD", trialDays: 7, period: .monthly),
+                PaywallProduct(id: "yearly", localizedPrice: "$29.99", price: 29.99, currencyCode: "USD", trialDays: 7, period: .yearly),
+            ]
+        }
+        return store.paywallProducts
     }
 
     public var body: some View {
         Section("Paywall Debug") {
-            // Primary template picker
             Picker("Primary", selection: $selectedPrimary) {
                 ForEach(PrimaryTemplate.allCases, id: \.self) { t in
                     Text(t.rawValue).tag(t)
                 }
             }
 
-            // Winback template picker
             Picker("Winback", selection: $selectedWinback) {
                 ForEach(WinbackTemplate.allCases, id: \.self) { t in
                     Text(t.rawValue).tag(t)
                 }
             }
 
-            // Dismissible toggle
             Toggle("Dismissible", isOn: $isDismissible)
 
-            // Info
+            HStack {
+                Text("Premium")
+                Spacer()
+                Text(store.isPremium ? "Active" : "Free")
+                    .foregroundColor(store.isPremium ? .green : .secondary)
+            }
+
+            HStack {
+                Text("Products")
+                Spacer()
+                Text("\(products.count) loaded")
+                    .foregroundColor(.secondary)
+            }
+
             HStack {
                 Text("Impressions")
                 Spacer()
@@ -78,15 +89,6 @@ public struct PaywallDebugView: View {
                     .foregroundColor(.secondary)
             }
 
-            HStack {
-                Text("User ID")
-                Spacer()
-                Text(String(em.userId.prefix(8)) + "...")
-                    .foregroundColor(.secondary)
-                    .font(.system(size: 12, design: .monospaced))
-            }
-
-            // Show paywall button
             Button {
                 em.forceTemplate(primary: selectedPrimary)
                 em.forceTemplate(winback: selectedWinback)
@@ -101,7 +103,6 @@ public struct PaywallDebugView: View {
             }
             .buttonStyle(.borderedProminent)
 
-            // Clear overrides
             Button("Clear Overrides", role: .destructive) {
                 em.clearOverrides()
             }
@@ -116,18 +117,29 @@ public struct PaywallDebugView: View {
                 showWinback: true,
                 isDismissible: isDismissible,
                 onPurchase: { productId in
-                    await onPurchase(productId)
-                    // Auto-dismiss after purchase (mock or real)
-                    await MainActor.run {
-                        showPaywall = false
-                        em.clearOverrides()
+                    let result = await store.purchase(productId: productId)
+                    if case .purchased = result {
+                        await MainActor.run {
+                            showPaywall = false
+                            em.clearOverrides()
+                        }
+                    }
+                    // If using mocks, simulate success
+                    if store.paywallProducts.isEmpty {
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        await MainActor.run {
+                            showPaywall = false
+                            em.clearOverrides()
+                        }
                     }
                 },
                 onRestore: {
-                    await onRestore()
-                    await MainActor.run {
-                        showPaywall = false
-                        em.clearOverrides()
+                    await store.restore()
+                    if store.isPremium {
+                        await MainActor.run {
+                            showPaywall = false
+                            em.clearOverrides()
+                        }
                     }
                 },
                 onDismiss: {
