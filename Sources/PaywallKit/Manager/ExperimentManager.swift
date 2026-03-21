@@ -62,6 +62,42 @@ public final class ExperimentManager: ObservableObject {
         return template
     }
 
+    // MARK: - Debug Override
+
+    /// Force a specific primary template for testing. Pass nil to clear.
+    public func forceTemplate(primary: PrimaryTemplate?) {
+        if let primary {
+            defaults.set(primary.rawValue, forKey: Keys.serverOverride + "_primary")
+        } else {
+            defaults.removeObject(forKey: Keys.serverOverride + "_primary")
+        }
+    }
+
+    /// Force a specific winback template for testing. Pass nil to clear.
+    public func forceTemplate(winback: WinbackTemplate?) {
+        if let winback {
+            defaults.set(winback.rawValue, forKey: Keys.serverOverride + "_winback")
+        } else {
+            defaults.removeObject(forKey: Keys.serverOverride + "_winback")
+        }
+    }
+
+    /// Force isDismissible for testing. Pass nil to clear.
+    public func forceIsDismissible(_ value: Bool?) {
+        if let value {
+            defaults.set(value, forKey: Keys.serverIsDismissible)
+        } else {
+            defaults.removeObject(forKey: Keys.serverIsDismissible)
+        }
+    }
+
+    /// Clear all debug overrides
+    public func clearOverrides() {
+        defaults.removeObject(forKey: Keys.serverOverride + "_primary")
+        defaults.removeObject(forKey: Keys.serverOverride + "_winback")
+        defaults.removeObject(forKey: Keys.serverIsDismissible)
+    }
+
     // MARK: - Impression Tracking
 
     /// Number of times the paywall has been shown for this app
