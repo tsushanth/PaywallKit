@@ -115,8 +115,21 @@ public struct PaywallDebugView: View {
                 theme: theme,
                 showWinback: true,
                 isDismissible: isDismissible,
-                onPurchase: onPurchase,
-                onRestore: onRestore,
+                onPurchase: { productId in
+                    await onPurchase(productId)
+                    // Auto-dismiss after purchase (mock or real)
+                    await MainActor.run {
+                        showPaywall = false
+                        em.clearOverrides()
+                    }
+                },
+                onRestore: {
+                    await onRestore()
+                    await MainActor.run {
+                        showPaywall = false
+                        em.clearOverrides()
+                    }
+                },
                 onDismiss: {
                     showPaywall = false
                     em.clearOverrides()
