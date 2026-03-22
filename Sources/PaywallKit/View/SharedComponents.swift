@@ -104,13 +104,26 @@ struct FeatureRow: View {
     let feature: PaywallFeature
     let theme: PaywallTheme
 
+    /// Detect if icon is an SF Symbol name (contains a dot or is all ASCII) vs emoji
+    private var isSFSymbol: Bool {
+        feature.icon.contains(".") || feature.icon.allSatisfy(\.isASCII)
+    }
+
     var body: some View {
         HStack(spacing: 14) {
-            Text(feature.icon)
-                .font(.system(size: 20))
-                .frame(width: 40, height: 40)
-                .background(theme.accent.opacity(0.12))
-                .cornerRadius(10)
+            Group {
+                if isSFSymbol {
+                    Image(systemName: feature.icon)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(theme.accent)
+                } else {
+                    Text(feature.icon)
+                        .font(.system(size: 20))
+                }
+            }
+            .frame(width: 40, height: 40)
+            .background(theme.accent.opacity(0.12))
+            .cornerRadius(10)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(feature.title)
