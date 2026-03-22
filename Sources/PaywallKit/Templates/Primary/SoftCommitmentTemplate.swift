@@ -77,8 +77,7 @@ struct SoftCommitmentTemplate: View {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(features.prefix(4), id: \.title) { feat in
                             HStack(spacing: 10) {
-                                Text(feat.icon)
-                                    .font(.system(size: 16))
+                                IconView(icon: feat.icon, size: 16, color: theme.accent)
                                 Text(feat.title)
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(.white)

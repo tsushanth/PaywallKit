@@ -36,8 +36,7 @@ struct ValueStackTemplate: View {
                     VStack(spacing: 0) {
                         ForEach(Array(features.enumerated()), id: \.element.title) { idx, feat in
                             HStack(spacing: 14) {
-                                Text(feat.icon)
-                                    .font(.system(size: 22))
+                                IconView(icon: feat.icon, size: 22, color: theme.accent)
                                     .frame(width: 44, height: 44)
                                     .background(theme.accent.opacity(0.1))
                                     .cornerRadius(12)

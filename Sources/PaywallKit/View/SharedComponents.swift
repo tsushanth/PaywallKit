@@ -100,27 +100,35 @@ struct CTAButton: View {
     }
 }
 
+/// Renders an icon string as either an SF Symbol (Image) or emoji (Text).
+struct IconView: View {
+    let icon: String
+    var size: CGFloat = 20
+    var color: Color = .white
+
+    private var isSFSymbol: Bool {
+        icon.contains(".") || (icon.allSatisfy(\.isASCII) && !icon.isEmpty)
+    }
+
+    var body: some View {
+        if isSFSymbol {
+            Image(systemName: icon)
+                .font(.system(size: size - 2, weight: .medium))
+                .foregroundColor(color)
+        } else {
+            Text(icon)
+                .font(.system(size: size))
+        }
+    }
+}
+
 struct FeatureRow: View {
     let feature: PaywallFeature
     let theme: PaywallTheme
 
-    /// Detect if icon is an SF Symbol name (contains a dot or is all ASCII) vs emoji
-    private var isSFSymbol: Bool {
-        feature.icon.contains(".") || feature.icon.allSatisfy(\.isASCII)
-    }
-
     var body: some View {
         HStack(spacing: 14) {
-            Group {
-                if isSFSymbol {
-                    Image(systemName: feature.icon)
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(theme.accent)
-                } else {
-                    Text(feature.icon)
-                        .font(.system(size: 20))
-                }
-            }
+            IconView(icon: feature.icon, color: theme.accent)
             .frame(width: 40, height: 40)
             .background(theme.accent.opacity(0.12))
             .cornerRadius(10)

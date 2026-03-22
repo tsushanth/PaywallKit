@@ -91,8 +91,7 @@ struct SocialProofTemplate: View {
                         HStack(spacing: 0) {
                             ForEach(features.prefix(3), id: \.title) { feat in
                                 VStack(spacing: 6) {
-                                    Text(feat.icon)
-                                        .font(.system(size: 24))
+                                    IconView(icon: feat.icon, size: 24, color: theme.accent)
                                     Text(feat.title)
                                         .font(.system(size: 11, weight: .semibold))
                                         .foregroundColor(.white)

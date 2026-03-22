@@ -68,8 +68,7 @@ struct NowOrNeverTemplate: View {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                             ForEach(features.prefix(6), id: \.title) { feat in
                                 HStack(spacing: 6) {
-                                    Text(feat.icon)
-                                        .font(.system(size: 14))
+                                    IconView(icon: feat.icon, size: 14, color: theme.accent)
                                     Text(feat.title)
                                         .font(.system(size: 12, weight: .semibold))
                                         .foregroundColor(.white)
