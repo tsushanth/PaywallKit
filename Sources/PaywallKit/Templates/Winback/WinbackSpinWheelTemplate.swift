@@ -56,33 +56,35 @@ struct WinbackSpinWheelTemplate: View {
 
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
-                    // Header
-                    Text("🎰")
-                        .font(.system(size: 48))
-
-                    VStack(spacing: 4) {
-                        Text("Spin to Win!")
-                            .font(.system(size: 30, weight: .black))
-                            .foregroundColor(.white)
-
-                        Text("Try your luck for an exclusive deal")
-                            .font(.system(size: 15))
-                            .foregroundColor(.white.opacity(0.6))
+                    // Header — compact when result showing
+                    if !showResult {
+                        Text("🎰")
+                            .font(.system(size: 48))
                     }
 
-                    // Wheel
+                    VStack(spacing: 4) {
+                        Text(showResult ? "🎉 YOU WON! 🎉" : "Spin to Win!")
+                            .font(.system(size: showResult ? 24 : 30, weight: .black))
+                            .foregroundColor(showResult ? theme.accent : .white)
+
+                        if !showResult {
+                            Text("Try your luck for an exclusive deal")
+                                .font(.system(size: 15))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                    }
+
+                    // Wheel — shrinks after result
+                    let wheelSize: CGFloat = showResult ? 160 : 290
                     ZStack {
-                        // Outer frame
                         Circle()
                             .fill(Color(red: 0.16, green: 0.16, blue: 0.24))
-                            .frame(width: 290, height: 290)
+                            .frame(width: wheelSize, height: wheelSize)
 
-                        // Wheel segments
                         wheelView
-                            .frame(width: 264, height: 264)
+                            .frame(width: wheelSize - 26, height: wheelSize - 26)
                             .rotationEffect(.degrees(wheelRotation))
 
-                        // Center button
                         Button(action: spin) {
                             Circle()
                                 .fill(
@@ -90,27 +92,26 @@ struct WinbackSpinWheelTemplate: View {
                                         colors: [theme.accent, theme.accent2],
                                         startPoint: .top, endPoint: .bottom)
                                 )
-                                .frame(width: 56, height: 56)
+                                .frame(width: showResult ? 36 : 56, height: showResult ? 36 : 56)
                                 .overlay(
                                     Text(hasSpun ? "🤞" : "SPIN")
-                                        .font(.system(size: hasSpun ? 22 : 12, weight: .black))
+                                        .font(.system(size: hasSpun ? (showResult ? 16 : 22) : 12, weight: .black))
                                         .foregroundColor(.white)
                                 )
                                 .shadow(color: theme.accent.opacity(0.5), radius: 8)
                         }
                         .disabled(hasSpun)
 
-                        // Pointer (top)
                         VStack {
                             Triangle()
                                 .fill(theme.accent)
-                                .frame(width: 20, height: 16)
+                                .frame(width: showResult ? 14 : 20, height: showResult ? 10 : 16)
                                 .shadow(color: .black.opacity(0.5), radius: 2)
                             Spacer()
                         }
-                        .frame(height: 290)
+                        .frame(height: wheelSize)
                     }
-                    .padding(.vertical, 8)
+                    .animation(.spring(response: 0.5), value: showResult)
 
                     // Prompt or result
                     if showResult {
@@ -205,52 +206,40 @@ struct WinbackSpinWheelTemplate: View {
     // MARK: - Result
 
     private var resultView: some View {
-        VStack(spacing: 12) {
-            Text("🎉 YOU WON! 🎉")
-                .font(.system(size: 26, weight: .black))
-                .foregroundColor(theme.accent)
-
-            // Prize card
-            VStack(spacing: 8) {
-                let prize = prizes[targetIndex]
+        VStack(spacing: 10) {
+            // Compact prize info
+            let prize = prizes[targetIndex]
+            HStack(spacing: 12) {
                 Text(prize.emoji)
-                    .font(.system(size: 52))
+                    .font(.system(size: 36))
 
-                Text(prize.label.replacingOccurrences(of: "\n", with: " "))
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(.white)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(prize.label.replacingOccurrences(of: "\n", with: " "))
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.white)
 
-                if let p = yearlyProduct {
-                    let trialDays = p.trialDays ?? 3
-                    Text("\(trialDays)-day free trial")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(theme.accent)
-
-                    Text("Then \(p.localizedPrice)/year")
-                        .font(.system(size: 13))
-                        .foregroundColor(.white.opacity(0.5))
+                    if let p = yearlyProduct {
+                        let trialDays = p.trialDays ?? 3
+                        Text("\(trialDays)-day free trial · then \(p.localizedPrice)/year")
+                            .font(.system(size: 13))
+                            .foregroundColor(theme.accent)
+                    }
                 }
+                Spacer()
             }
-            .padding(28)
-            .frame(maxWidth: .infinity)
-            .background(
-                LinearGradient(
-                    colors: [theme.accent.opacity(0.1), .clear],
-                    startPoint: .top, endPoint: .bottom)
-            )
+            .padding(16)
             .background(theme.cardBackground)
-            .cornerRadius(20)
+            .cornerRadius(16)
 
-            CTAButton(title: "🎁 Claim My Prize", theme: theme, isLoading: isPurchasing) {
+            CTAButton(title: "Claim My Prize", theme: theme, isLoading: isPurchasing) {
                 guard let id = yearlyProduct?.id else { return }
                 isPurchasing = true
                 onPurchase(id)
             }
 
-            Text("Cancel anytime during trial · No charge today")
+            Text("Cancel anytime · No charge today")
                 .font(.system(size: 11))
                 .foregroundColor(.white.opacity(0.4))
-                .multilineTextAlignment(.center)
 
             RestoreButton(action: { })
             LegalFooter(trialDays: yearlyProduct?.trialDays)
