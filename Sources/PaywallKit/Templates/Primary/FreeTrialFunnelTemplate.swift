@@ -300,7 +300,8 @@ struct FreeTrialFunnelTemplate: View {
                                     .foregroundColor(.black.opacity(0.35))
                                     .strikethrough()
                             }
-                            let perMonth = NSDecimalNumber(decimal: p.price).doubleValue / 12
+                            let divisor: Double = p.period == .yearly ? 12 : p.period == .weekly ? 0.25 : 1
+                            let perMonth = NSDecimalNumber(decimal: p.price).doubleValue / divisor
                             Text(String(format: "$%.2f /mo", perMonth))
                                 .font(.system(size: 22, weight: .black))
                                 .foregroundColor(.black)
@@ -328,18 +329,21 @@ struct FreeTrialFunnelTemplate: View {
 
                             HStack {
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Yearly Plan")
+                                    let planName = p.period == .yearly ? "Yearly Plan" : p.period == .monthly ? "Monthly Plan" : "Weekly Plan"
+                                    Text(planName)
                                         .font(.system(size: 16, weight: .bold))
                                         .foregroundColor(.black)
-                                    Text("12mo · \(p.localizedPrice)")
+                                    Text("\(p.localizedPrice)/\(p.period.rawValue)")
                                         .font(.system(size: 13))
                                         .foregroundColor(.black.opacity(0.5))
                                 }
                                 Spacer()
-                                let perMonth = NSDecimalNumber(decimal: p.price).doubleValue / 12
-                                Text(String(format: "$%.2f /mo", perMonth))
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.black)
+                                if p.period == .yearly {
+                                    let perMonth = NSDecimalNumber(decimal: p.price).doubleValue / 12
+                                    Text(String(format: "$%.2f /mo", perMonth))
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.black)
+                                }
                             }
                             .padding(16)
                         }
