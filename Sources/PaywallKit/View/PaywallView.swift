@@ -109,6 +109,12 @@ public struct PaywallView: View {
                 appName: appName, features: features, products: products,
                 theme: theme, onPurchase: handlePurchase, onRestore: handleRestore,
                 onClose: handleClose, isDismissible: isDismissible)
+        case .freeTrialFunnel:
+            FreeTrialFunnelTemplate(
+                appName: appName, features: features, products: products,
+                theme: theme, isDismissible: isDismissible,
+                onPurchase: handlePurchase, onRestore: handleRestore,
+                onClose: handleClose)
         }
     }
 

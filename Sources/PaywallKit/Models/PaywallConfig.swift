@@ -66,6 +66,7 @@ public enum PrimaryTemplate: String, CaseIterable, Codable, Sendable {
     case softCommitment    // Strava/Cal AI: Trial-focused, "Cancel anytime", low-risk messaging
     case nowOrNever        // Captions/Finch: Countdown timer, big discount banner, urgency
     case trialGate         // Hard paywall: yearly trial only, no close button, payment method required
+    case freeTrialFunnel   // 3-screen escalation: features → compare plans → one-time offer
 }
 
 public enum WinbackTemplate: String, CaseIterable, Codable, Sendable {
