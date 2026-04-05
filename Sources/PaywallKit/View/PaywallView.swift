@@ -7,7 +7,7 @@ public struct PaywallView: View {
     let features: [PaywallFeature]
     let products: [PaywallProduct]
     let theme: PaywallTheme
-    let onPurchase: (String) async -> Void
+    let onPurchase: (String) async -> Bool
     let onRestore: () async -> Void
     let onDismiss: () -> Void
     let showWinback: Bool
@@ -31,7 +31,7 @@ public struct PaywallView: View {
         isDismissible: Bool = true,
         termsURL: URL? = URL(string: "https://kreativekoala.llc/terms"),
         privacyURL: URL? = URL(string: "https://kreativekoala.llc/privacy"),
-        onPurchase: @escaping (String) async -> Void,
+        onPurchase: @escaping (String) async -> Bool,
         onRestore: @escaping () async -> Void,
         onDismiss: @escaping () -> Void
     ) {
@@ -154,12 +154,16 @@ public struct PaywallView: View {
     // MARK: - Handlers
 
     private func handlePurchase(_ productId: String) {
-        didPurchase = true
-        PaywallManager.shared.trackEvent(
-            appId: appId, placement: "onboarding",
-            templateId: primaryTemplate.rawValue, event: "purchased",
-            productId: productId)
-        Task { await onPurchase(productId) }
+        Task {
+            let success = await onPurchase(productId)
+            if success {
+                didPurchase = true
+                PaywallManager.shared.trackEvent(
+                    appId: appId, placement: "onboarding",
+                    templateId: primaryTemplate.rawValue, event: "purchased",
+                    productId: productId)
+            }
+        }
     }
 
     private func handleRestore() {
@@ -186,11 +190,15 @@ public struct PaywallView: View {
     }
 
     private func handleWinbackPurchase(_ productId: String) {
-        PaywallManager.shared.trackEvent(
-            appId: appId, placement: "winback",
-            templateId: winbackTemplate.rawValue, event: "winback_purchased",
-            productId: productId)
-        Task { await onPurchase(productId) }
+        Task {
+            let success = await onPurchase(productId)
+            if success {
+                PaywallManager.shared.trackEvent(
+                    appId: appId, placement: "winback",
+                    templateId: winbackTemplate.rawValue, event: "winback_purchased",
+                    productId: productId)
+            }
+        }
     }
 
     private func handleWinbackClose() {

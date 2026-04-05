@@ -123,6 +123,7 @@ public struct PaywallDebugView: View {
                             showPaywall = false
                             em.clearOverrides()
                         }
+                        return true
                     }
                     // If using mocks, simulate success
                     if store.paywallProducts.isEmpty {
@@ -131,7 +132,9 @@ public struct PaywallDebugView: View {
                             showPaywall = false
                             em.clearOverrides()
                         }
+                        return true
                     }
+                    return false
                 },
                 onRestore: {
                     await store.restore()

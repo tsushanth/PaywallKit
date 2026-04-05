@@ -111,6 +111,8 @@ struct FreeTrialFunnelTemplate: View {
                             .font(.system(size: 14, weight: .bold))
                             .foregroundColor(theme.accent)
                     }
+
+                    LegalFooter(trialDays: yearlyProduct?.trialDays)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 34)
@@ -163,6 +165,9 @@ struct FreeTrialFunnelTemplate: View {
 
                         RestoreButton(action: onRestore)
                             .padding(.top, 8)
+
+                        legalLinksLight
+                            .padding(.top, 4)
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 24)
@@ -243,6 +248,33 @@ struct FreeTrialFunnelTemplate: View {
         .background(Color.white)
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+    }
+
+    // MARK: - Light Legal Links (for light-background screens)
+
+    private var legalLinksLight: some View {
+        VStack(spacing: 4) {
+            Text("Recurring billing. Cancel anytime in Settings.")
+                .font(.system(size: 10))
+                .foregroundColor(.black.opacity(0.35))
+
+            HStack(spacing: 12) {
+                if let url = PaywallManager.shared.termsURL {
+                    Link("Terms of Use", destination: url)
+                        .font(.system(size: 10))
+                        .foregroundColor(.black.opacity(0.45))
+                }
+                Text("·")
+                    .font(.system(size: 10))
+                    .foregroundColor(.black.opacity(0.2))
+                if let url = PaywallManager.shared.privacyURL {
+                    Link("Privacy Policy", destination: url)
+                        .font(.system(size: 10))
+                        .foregroundColor(.black.opacity(0.45))
+                }
+            }
+        }
+        .multilineTextAlignment(.center)
     }
 
     // MARK: - Screen 3: Light — One-Time Offer
@@ -382,6 +414,8 @@ struct FreeTrialFunnelTemplate: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(.black.opacity(0.6))
                     }
+
+                    legalLinksLight
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 34)

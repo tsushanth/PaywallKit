@@ -69,9 +69,11 @@ public final class StoreManager: ObservableObject {
     /// Loads products from App Store and converts to PaywallProduct.
     public func loadProducts() async {
         do {
+            print("[PaywallKit/StoreManager] Loading products for IDs: \(productIds)")
             storeProducts = try await Product.products(for: productIds)
             paywallProducts = storeProducts.compactMap { convert($0) }
                 .sorted { periodOrder($0.period) < periodOrder($1.period) }
+            print("[PaywallKit/StoreManager] Loaded \(paywallProducts.count) products: \(paywallProducts.map { "\($0.id) \($0.localizedPrice)" })")
         } catch {
             print("[PaywallKit/StoreManager] Failed to load products: \(error)")
         }
@@ -82,7 +84,9 @@ public final class StoreManager: ObservableObject {
     /// Purchase a product by its ID. Returns true on success.
     @discardableResult
     public func purchase(productId: String) async -> PurchaseResult {
+        print("[PaywallKit/StoreManager] Purchase requested: \(productId)")
         guard let product = storeProducts.first(where: { $0.id == productId }) else {
+            print("[PaywallKit/StoreManager] Product not found! Available: \(storeProducts.map { $0.id })")
             return .failed(StoreError.productNotFound)
         }
 
