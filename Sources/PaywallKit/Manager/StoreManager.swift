@@ -30,6 +30,12 @@ public final class StoreManager: ObservableObject {
     @Published public private(set) var subscriptionExpirationDate: Date?
     @Published public private(set) var isLifetime: Bool = false
 
+    // MARK: - Purchase Callback
+
+    /// Called when a purchase completes successfully. Register your analytics hook here.
+    /// Parameters: (productId: String, price: Decimal?, currencyCode: String?)
+    public var onPurchaseCompleted: ((String, Decimal?, String?) -> Void)?
+
     // MARK: - Internal
 
     private var storeProducts: [Product] = []
@@ -81,7 +87,7 @@ public final class StoreManager: ObservableObject {
 
     // MARK: - Purchase
 
-    /// Purchase a product by its ID. Returns true on success.
+    /// Purchase a product by its ID.
     @discardableResult
     public func purchase(productId: String) async -> PurchaseResult {
         print("[PaywallKit/StoreManager] Purchase requested: \(productId)")
@@ -98,6 +104,7 @@ public final class StoreManager: ObservableObject {
                 let transaction = try checkVerification(verification)
                 await transaction.finish()
                 await refreshSubscriptionStatus()
+                onPurchaseCompleted?(productId, product.price, product.priceFormatStyle.currencyCode)
                 return .purchased
 
             case .pending:
