@@ -72,7 +72,7 @@ public final class StoreManager: ObservableObject {
             return
         }
 
-        // Present Apple's offer code redemption sheet
+        // Auto-redeem an offer code from inventory and open the pre-filled redemption URL
         defaults.set(Date().timeIntervalSince1970, forKey: DismissKeys.lastOffer)
         defaults.set(0, forKey: DismissKeys.count) // reset count
 
@@ -80,16 +80,28 @@ public final class StoreManager: ObservableObject {
         Task { @MainActor in
             // Small delay so the paywall sheet fully dismisses first
             try? await Task.sleep(nanoseconds: 800_000_000)
+
+            // Try to get a real offer code from our API
+            let appId = PaywallKitSDK.shared.appId
+            let userId = PaywallKitSDK.shared.userId
+            if !appId.isEmpty && !userId.isEmpty {
+                if let result = await PaywallManager.shared.redeemPromoCode("FOCUS30", appId: appId, userId: userId) {
+                    print("[PaywallKit/StoreManager] Auto-redeemed offer code, opening redemption URL")
+                    // redeemPromoCode already opens the redemption URL via UIApplication.shared.open
+                    return
+                }
+            }
+
+            // Fallback: show Apple's generic code entry sheet
+            print("[PaywallKit/StoreManager] No offer code available, showing code entry sheet")
             if #available(iOS 16.0, *) {
                 if let scene = UIApplication.shared.connectedScenes
                     .compactMap({ $0 as? UIWindowScene })
                     .first(where: { $0.activationState == .foregroundActive }) {
                     try? await AppStore.presentOfferCodeRedeemSheet(in: scene)
-                    print("[PaywallKit/StoreManager] Offer code redeem sheet presented")
                 }
             } else {
                 SKPaymentQueue.default().presentCodeRedemptionSheet()
-                print("[PaywallKit/StoreManager] Legacy offer code sheet presented")
             }
         }
         #endif
