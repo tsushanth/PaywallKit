@@ -50,8 +50,8 @@ public final class StoreManager: ObservableObject {
     /// Default: 1 (show on first dismiss). Set higher to wait.
     public var offerAfterDismissThreshold: Int = 1
 
-    /// Minimum seconds between offer presentations. Default: 86400 (1 day).
-    public var offerAfterDismissCooldown: TimeInterval = 86_400
+    /// Minimum seconds between offer presentations. Default: 3600 (1 hour).
+    public var offerAfterDismissCooldown: TimeInterval = 3_600
 
     /// Tracks a paywall dismiss and optionally presents Apple's offer code sheet.
     /// Call this from your paywall's onDismiss callback.
@@ -68,7 +68,9 @@ public final class StoreManager: ObservableObject {
 
         // Check cooldown
         let lastOffer = defaults.double(forKey: DismissKeys.lastOffer)
-        if lastOffer > 0 && Date().timeIntervalSince1970 - lastOffer < offerAfterDismissCooldown {
+        let elapsed = Date().timeIntervalSince1970 - lastOffer
+        if lastOffer > 0 && elapsed < offerAfterDismissCooldown {
+            print("[PaywallKit/StoreManager] Offer cooldown active (\(Int(elapsed))s / \(Int(offerAfterDismissCooldown))s)")
             return
         }
 
@@ -298,26 +300,11 @@ public final class StoreManager: ObservableObject {
         startMessageListener()
     }
 
-    /// Listen for StoreKit messages (win-back offers, price increases, offer codes).
-    /// Apple sends these automatically — we just need to display them.
+    /// StoreKit message listener disabled — Apple auto-presents win-back offers
+    /// without an explicit listener. Adding one causes duplicate presentation.
     private func startMessageListener() {
-        #if canImport(UIKit) && !os(watchOS)
-        messageListener = Task.detached { @MainActor in
-            for await message in StoreKit.Message.messages {
-                print("[PaywallKit/StoreManager] Received StoreKit message: \(message.reason)")
-                if let scene = UIApplication.shared.connectedScenes
-                    .compactMap({ $0 as? UIWindowScene })
-                    .first(where: { $0.activationState == .foregroundActive }) {
-                    do {
-                        try await message.display(in: scene)
-                        print("[PaywallKit/StoreManager] StoreKit message displayed")
-                    } catch {
-                        print("[PaywallKit/StoreManager] Failed to display message: \(error)")
-                    }
-                }
-            }
-        }
-        #endif
+        // Intentionally empty. Apple handles Message.messages display automatically
+        // when no listener is registered. Adding a listener causes double-presentation.
     }
 
     // MARK: - Helpers
