@@ -53,6 +53,11 @@ public final class StoreManager: ObservableObject {
     /// Minimum seconds between offer presentations. Default: 3600 (1 hour).
     public var offerAfterDismissCooldown: TimeInterval = 3_600
 
+    /// True if the offer-after-dismiss has been shown in the current session.
+    /// Apps can check this to avoid re-presenting the paywall after the user
+    /// rejected the offer.
+    public private(set) var hasShownOfferThisSession: Bool = false
+
     /// Tracks a paywall dismiss and optionally presents Apple's offer code sheet.
     /// Call this from your paywall's onDismiss callback.
     public func trackPaywallDismiss() {
@@ -90,6 +95,7 @@ public final class StoreManager: ObservableObject {
                 if let result = await PaywallManager.shared.redeemPromoCode("FOCUS30", appId: appId, userId: userId) {
                     print("[PaywallKit/StoreManager] Auto-redeemed offer code, opening redemption URL")
                     // redeemPromoCode already opens the redemption URL via UIApplication.shared.open
+                    hasShownOfferThisSession = true
                     return
                 }
             }
