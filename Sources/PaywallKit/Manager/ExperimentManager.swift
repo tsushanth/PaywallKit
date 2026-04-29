@@ -13,6 +13,7 @@ public final class ExperimentManager: ObservableObject {
         static let winbackTemplate = "pwkit_winback_template"
         static let serverOverride = "pwkit_server_override"
         static let serverIsDismissible = "pwkit_server_dismissible"
+        static let serverShowWinback = "pwkit_server_show_winback"
         static let lastServerCheck = "pwkit_last_server_check"
         static let impressionCount = "pwkit_impression_count"
     }
@@ -96,6 +97,7 @@ public final class ExperimentManager: ObservableObject {
         defaults.removeObject(forKey: Keys.serverOverride + "_primary")
         defaults.removeObject(forKey: Keys.serverOverride + "_winback")
         defaults.removeObject(forKey: Keys.serverIsDismissible)
+        defaults.removeObject(forKey: Keys.serverShowWinback)
     }
 
     // MARK: - Impression Tracking
@@ -119,6 +121,24 @@ public final class ExperimentManager: ObservableObject {
         return true // default: dismissible
     }
 
+    /// Whether to show the winback after primary dismissal.
+    /// Defaults to false (compliant baseline); server enables for repeat dismissers.
+    public func showWinback() -> Bool {
+        if defaults.object(forKey: Keys.serverShowWinback) != nil {
+            return defaults.bool(forKey: Keys.serverShowWinback)
+        }
+        return false // default: no immediate winback — safe for App Store review
+    }
+
+    /// Force showWinback for testing. Pass nil to clear.
+    public func forceShowWinback(_ value: Bool?) {
+        if let value {
+            defaults.set(value, forKey: Keys.serverShowWinback)
+        } else {
+            defaults.removeObject(forKey: Keys.serverShowWinback)
+        }
+    }
+
     // MARK: - Server Override
 
     /// Check server for template override (fire-and-forget, non-blocking)
@@ -136,6 +156,7 @@ public final class ExperimentManager: ObservableObject {
         let apiBase = PaywallManager.shared.apiBase
         guard var components = URLComponents(string: "\(apiBase)/resolve") else { return }
         let impressions = await MainActor.run { impressionCount(appId: appId) }
+
         components.queryItems = [
             URLQueryItem(name: "app", value: appId),
             URLQueryItem(name: "placement", value: "onboarding"),
@@ -160,6 +181,9 @@ public final class ExperimentManager: ObservableObject {
                 }
                 if let dismissible = json["isDismissible"] as? Bool {
                     self.defaults.set(dismissible, forKey: Keys.serverIsDismissible)
+                }
+                if let showWinback = json["showWinback"] as? Bool {
+                    self.defaults.set(showWinback, forKey: Keys.serverShowWinback)
                 }
                 self.defaults.set(Date(), forKey: Keys.lastServerCheck)
             }

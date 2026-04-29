@@ -9,7 +9,7 @@ struct TrialGateTemplate: View {
     let features: [PaywallFeature]
     let products: [PaywallProduct]
     let theme: PaywallTheme
-    let onPurchase: (String) -> Void
+    let onPurchase: (String) async -> Bool
     let onRestore: () -> Void
     let onClose: () -> Void
     let isDismissible: Bool
@@ -97,8 +97,11 @@ struct TrialGateTemplate: View {
                     VStack(spacing: 10) {
                         CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
                             guard let id = yearlyProduct?.id else { return }
-                            isPurchasing = true
-                            onPurchase(id)
+                            Task {
+                                isPurchasing = true
+                                _ = await onPurchase(id)
+                                isPurchasing = false
+                            }
                         }
 
                         if let p = yearlyProduct {

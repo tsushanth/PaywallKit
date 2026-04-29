@@ -10,7 +10,7 @@ struct FreeTrialFunnelTemplate: View {
     let products: [PaywallProduct]
     let theme: PaywallTheme
     let isDismissible: Bool
-    let onPurchase: (String) -> Void
+    let onPurchase: (String) async -> Bool
     let onRestore: () -> Void
     let onClose: () -> Void
 
@@ -229,8 +229,11 @@ struct FreeTrialFunnelTemplate: View {
                 }
 
                 Button {
-                    isPurchasing = true
-                    onPurchase(product.id)
+                    Task {
+                        isPurchasing = true
+                        _ = await onPurchase(product.id)
+                        isPurchasing = false
+                    }
                 } label: {
                     Text("TRY FOR $0.00")
                         .font(.system(size: 14, weight: .bold))
@@ -387,8 +390,11 @@ struct FreeTrialFunnelTemplate: View {
                     // CTA
                     Button {
                         guard let id = product?.id else { return }
-                        isPurchasing = true
-                        onPurchase(id)
+                        Task {
+                            isPurchasing = true
+                            _ = await onPurchase(id)
+                            isPurchasing = false
+                        }
                     } label: {
                         HStack {
                             if isPurchasing {

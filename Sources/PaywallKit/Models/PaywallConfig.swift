@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Product (RC-agnostic)
 
-public struct PaywallProduct: Sendable {
+public struct PaywallProduct: Sendable, Equatable {
     public let id: String
     public let localizedPrice: String
     public let price: Decimal

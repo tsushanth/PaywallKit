@@ -32,7 +32,7 @@ struct ProductCard: View {
                         .cornerRadius(6)
                 }
 
-                Text(product.period.rawValue.capitalized)
+                Text(subscriptionLengthLabel)
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.white.opacity(0.7))
                     .textCase(.uppercase)
@@ -55,6 +55,15 @@ struct ProductCard: View {
             .cornerRadius(16)
         }
         .buttonStyle(.plain)
+    }
+
+    private var subscriptionLengthLabel: String {
+        switch product.period {
+        case .yearly: return "1-year subscription"
+        case .monthly: return "1-month subscription"
+        case .weekly: return "1-week subscription"
+        case .lifetime: return "Lifetime"
+        }
     }
 
     private var periodLabel: String {
@@ -172,11 +181,11 @@ struct LegalFooter: View {
     var body: some View {
         VStack(spacing: 6) {
             if let days = trialDays, days > 0, days <= 30 {
-                Text("\(days)-day free trial, then auto-renews. Cancel anytime.")
+                Text("\(days)-day free trial, then subscription auto-renews at the listed price. Cancel anytime in Settings.")
                     .font(.system(size: 10))
                     .foregroundColor(Color.white.opacity(0.3))
             } else {
-                Text("Recurring billing. Cancel anytime in Settings.")
+                Text("Subscription auto-renews at the listed price each period. Cancel anytime in Settings.")
                     .font(.system(size: 10))
                     .foregroundColor(Color.white.opacity(0.3))
             }

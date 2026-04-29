@@ -8,7 +8,7 @@ struct NowOrNeverTemplate: View {
     let features: [PaywallFeature]
     let products: [PaywallProduct]
     let theme: PaywallTheme
-    let onPurchase: (String) -> Void
+    let onPurchase: (String) async -> Bool
     let onRestore: () -> Void
     let onClose: () -> Void
 
@@ -100,8 +100,11 @@ struct NowOrNeverTemplate: View {
                         VStack(spacing: 10) {
                             CTAButton(title: ctaTitle, theme: theme, isLoading: isPurchasing) {
                                 guard let id = selectedId else { return }
-                                isPurchasing = true
-                                onPurchase(id)
+                                Task {
+                                    isPurchasing = true
+                                    _ = await onPurchase(id)
+                                    isPurchasing = false
+                                }
                             }
                             RestoreButton(action: onRestore)
                             LegalFooter(trialDays: selectedProduct?.trialDays)
@@ -119,6 +122,7 @@ struct NowOrNeverTemplate: View {
                 .padding(.trailing, 16)
         }
         .onAppear { selectedId = sortedProducts.first?.id }
+        .onChange(of: products) { _ in if selectedId == nil { selectedId = sortedProducts.first?.id } }
         .onReceive(timer) { _ in
             if timeRemaining > 0 { timeRemaining -= 1 }
         }

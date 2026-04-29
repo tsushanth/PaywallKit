@@ -1,5 +1,8 @@
 import StoreKit
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// StoreKit 2 purchase manager built into PaywallKit.
 /// Replaces RevenueCat — handles product loading, purchases, subscription status.
@@ -36,6 +39,62 @@ public final class StoreManager: ObservableObject {
     /// Parameters: (productId: String, price: Decimal?, currencyCode: String?)
     public var onPurchaseCompleted: ((String, Decimal?, String?) -> Void)?
 
+    // MARK: - Offer After Dismiss
+
+    /// When true, PaywallKit auto-presents Apple's offer code redemption sheet
+    /// after the user dismisses a paywall (on the Nth dismissal).
+    /// Defaults to true. Set to false to disable.
+    public var offerAfterDismissEnabled: Bool = true
+
+    /// Number of paywall dismissals before showing the Apple offer sheet.
+    /// Default: 1 (show on first dismiss). Set higher to wait.
+    public var offerAfterDismissThreshold: Int = 1
+
+    /// Minimum seconds between offer presentations. Default: 86400 (1 day).
+    public var offerAfterDismissCooldown: TimeInterval = 86_400
+
+    /// Tracks a paywall dismiss and optionally presents Apple's offer code sheet.
+    /// Call this from your paywall's onDismiss callback.
+    public func trackPaywallDismiss() {
+        guard offerAfterDismissEnabled, !isPremium else { return }
+
+        let count = defaults.integer(forKey: DismissKeys.count) + 1
+        defaults.set(count, forKey: DismissKeys.count)
+        defaults.set(Date().timeIntervalSince1970, forKey: DismissKeys.lastDismiss)
+
+        print("[PaywallKit/StoreManager] Paywall dismiss #\(count)")
+
+        guard count >= offerAfterDismissThreshold else { return }
+
+        // Check cooldown
+        let lastOffer = defaults.double(forKey: DismissKeys.lastOffer)
+        if lastOffer > 0 && Date().timeIntervalSince1970 - lastOffer < offerAfterDismissCooldown {
+            return
+        }
+
+        // Present Apple's offer code redemption sheet
+        defaults.set(Date().timeIntervalSince1970, forKey: DismissKeys.lastOffer)
+        defaults.set(0, forKey: DismissKeys.count) // reset count
+
+        #if canImport(UIKit) && !os(watchOS)
+        Task { @MainActor in
+            // Small delay so the paywall sheet fully dismisses first
+            try? await Task.sleep(nanoseconds: 800_000_000)
+            if #available(iOS 16.0, *) {
+                if let scene = UIApplication.shared.connectedScenes
+                    .compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive }) {
+                    try? await AppStore.presentOfferCodeRedeemSheet(in: scene)
+                    print("[PaywallKit/StoreManager] Offer code redeem sheet presented")
+                }
+            } else {
+                SKPaymentQueue.default().presentCodeRedemptionSheet()
+                print("[PaywallKit/StoreManager] Legacy offer code sheet presented")
+            }
+        }
+        #endif
+    }
+
     // MARK: - Internal
 
     private var storeProducts: [Product] = []
@@ -47,6 +106,12 @@ public final class StoreManager: ObservableObject {
         static let isPremium = "pwkit_is_premium"
         static let expirationDate = "pwkit_expiration"
         static let isLifetime = "pwkit_is_lifetime"
+    }
+
+    private enum DismissKeys {
+        static let count = "pwkit_dismiss_count"
+        static let lastDismiss = "pwkit_last_dismiss"
+        static let lastOffer = "pwkit_last_offer_shown"
     }
 
     private init() {
@@ -121,6 +186,39 @@ public final class StoreManager: ObservableObject {
         }
     }
 
+    /// Purchase a product with a promotional offer option (win-back flow).
+    /// The offer is signed server-side via `PromoOfferSigner`. Falls back to a standard
+    /// purchase if signing fails.
+    @discardableResult
+    @available(iOS 15.0, macOS 12.0, *)
+    public func purchaseWithPromoOffer(productId: String, offerCode: String) async -> PurchaseResult {
+        guard let product = storeProducts.first(where: { $0.id == productId }) else {
+            return .failed(StoreError.productNotFound)
+        }
+        let options: Set<Product.PurchaseOption>
+        if let option = try? await PromoOfferSigner.purchaseOption(product: product, offerCode: offerCode) {
+            options = [option]
+        } else {
+            options = []
+        }
+        do {
+            let result = try await product.purchase(options: options)
+            switch result {
+            case .success(let verification):
+                let transaction = try checkVerification(verification)
+                await transaction.finish()
+                await refreshSubscriptionStatus()
+                onPurchaseCompleted?(productId, product.price, product.priceFormatStyle.currencyCode)
+                return .purchased
+            case .pending: return .pending
+            case .userCancelled: return .cancelled
+            @unknown default: return .failed(StoreError.unknown)
+            }
+        } catch {
+            return .failed(error)
+        }
+    }
+
     // MARK: - Restore
 
     /// Syncs with App Store to restore previous purchases.
@@ -171,6 +269,8 @@ public final class StoreManager: ObservableObject {
 
     // MARK: - Transaction Listener
 
+    private var messageListener: Task<Void, Never>?
+
     private func startTransactionListener() {
         transactionListener = Task.detached { [weak self] in
             for await result in Transaction.updates {
@@ -183,6 +283,29 @@ public final class StoreManager: ObservableObject {
                 }
             }
         }
+        startMessageListener()
+    }
+
+    /// Listen for StoreKit messages (win-back offers, price increases, offer codes).
+    /// Apple sends these automatically — we just need to display them.
+    private func startMessageListener() {
+        #if canImport(UIKit) && !os(watchOS)
+        messageListener = Task.detached { @MainActor in
+            for await message in StoreKit.Message.messages {
+                print("[PaywallKit/StoreManager] Received StoreKit message: \(message.reason)")
+                if let scene = UIApplication.shared.connectedScenes
+                    .compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive }) {
+                    do {
+                        try await message.display(in: scene)
+                        print("[PaywallKit/StoreManager] StoreKit message displayed")
+                    } catch {
+                        print("[PaywallKit/StoreManager] Failed to display message: \(error)")
+                    }
+                }
+            }
+        }
+        #endif
     }
 
     // MARK: - Helpers
