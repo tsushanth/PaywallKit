@@ -87,11 +87,7 @@ public struct PaywallView: View {
         }
         .interactiveDismissDisabled(!isDismissible && !products.isEmpty)
         .onAppear {
-            // If no products are configured, let the user through immediately
-            if products.isEmpty {
-                onDismiss()
-                return
-            }
+            // Track view event — products may load asynchronously, don't auto-dismiss on empty
             PaywallManager.shared.trackEvent(
                 appId: appId, placement: placement,
                 templateId: primaryTemplate.rawValue, event: "viewed")
