@@ -61,7 +61,11 @@ public final class StoreManager: ObservableObject {
     /// Tracks a paywall dismiss and optionally presents Apple's offer code sheet.
     /// Call this from your paywall's onDismiss callback.
     public func trackPaywallDismiss() {
-        guard offerAfterDismissEnabled, !isPremium else { return }
+        print("[PaywallKit/StoreManager] trackPaywallDismiss called, enabled=\(offerAfterDismissEnabled) isPremium=\(isPremium)")
+        guard offerAfterDismissEnabled, !isPremium else {
+            print("[PaywallKit/StoreManager] Early return: offer disabled or already premium")
+            return
+        }
 
         let count = defaults.integer(forKey: DismissKeys.count) + 1
         defaults.set(count, forKey: DismissKeys.count)
