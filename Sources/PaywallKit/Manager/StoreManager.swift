@@ -166,8 +166,14 @@ public final class StoreManager: ObservableObject {
         do {
             print("[PaywallKit/StoreManager] Loading products for IDs: \(productIds)")
             storeProducts = try await Product.products(for: productIds)
-            paywallProducts = storeProducts.compactMap { convert($0) }
-                .sorted { periodOrder($0.period) < periodOrder($1.period) }
+            print("[PaywallKit/StoreManager] StoreKit returned \(storeProducts.count) raw products: \(storeProducts.map { $0.id })")
+            paywallProducts = storeProducts.compactMap { p in
+                let converted = convert(p)
+                if converted == nil {
+                    print("[PaywallKit/StoreManager] Failed to convert product: \(p.id) (type=\(p.type), period=\(p.subscription?.subscriptionPeriod.unit.rawValue ?? -1))")
+                }
+                return converted
+            }.sorted { periodOrder($0.period) < periodOrder($1.period) }
             print("[PaywallKit/StoreManager] Loaded \(paywallProducts.count) products: \(paywallProducts.map { "\($0.id) \($0.localizedPrice)" })")
         } catch {
             print("[PaywallKit/StoreManager] Failed to load products: \(error)")
