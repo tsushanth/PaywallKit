@@ -170,7 +170,7 @@ public final class StoreManager: ObservableObject {
             paywallProducts = storeProducts.compactMap { p in
                 let converted = convert(p)
                 if converted == nil {
-                    print("[PaywallKit/StoreManager] Failed to convert product: \(p.id) (type=\(p.type), period=\(p.subscription?.subscriptionPeriod.unit.rawValue ?? -1))")
+                    print("[PaywallKit/StoreManager] Failed to convert product: \(p.id) (type=\(p.type))")
                 }
                 return converted
             }.sorted { periodOrder($0.period) < periodOrder($1.period) }
