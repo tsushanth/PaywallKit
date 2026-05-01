@@ -92,16 +92,19 @@ public final class StoreManager: ObservableObject {
             // Small delay so the paywall sheet fully dismisses first
             try? await Task.sleep(nanoseconds: 800_000_000)
 
-            // Try to get a real offer code from our API
+            // Try to get a real offer code from our API.
+            // Per-app marketing code comes from /resolve → ExperimentManager. Falls back
+            // to FOCUS30 for backward compatibility with apps that haven't configured one.
             let appId = PaywallKitSDK.shared.appId
             let userId = PaywallKitSDK.shared.userId
+            let promoCode = ExperimentManager.shared.dismissPromoCode() ?? "FOCUS30"
             if !appId.isEmpty && !userId.isEmpty {
-                if let result = await PaywallManager.shared.redeemPromoCode("FOCUS30", appId: appId, userId: userId) {
-                    print("[PaywallKit/StoreManager] Auto-redeemed offer code, opening redemption URL")
-                    // redeemPromoCode already opens the redemption URL via UIApplication.shared.open
+                if let result = await PaywallManager.shared.redeemPromoCode(promoCode, appId: appId, userId: userId) {
+                    print("[PaywallKit/StoreManager] Auto-redeemed \(promoCode) → opening redemption URL")
                     hasShownOfferThisSession = true
                     return
                 }
+                print("[PaywallKit/StoreManager] redeemPromoCode \(promoCode) returned nil, falling back to native sheet")
             }
 
             // Fallback: show Apple's generic code entry sheet

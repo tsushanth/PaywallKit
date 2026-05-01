@@ -14,6 +14,8 @@ public final class ExperimentManager: ObservableObject {
         static let serverOverride = "pwkit_server_override"
         static let serverIsDismissible = "pwkit_server_dismissible"
         static let serverShowWinback = "pwkit_server_show_winback"
+        static let serverOfferAfterDismiss = "pwkit_server_offer_after_dismiss"
+        static let serverDismissPromoCode = "pwkit_server_dismiss_promo_code"
         static let lastServerCheck = "pwkit_last_server_check"
         static let impressionCount = "pwkit_impression_count"
     }
@@ -130,6 +132,21 @@ public final class ExperimentManager: ObservableObject {
         return false // default: no immediate winback — safe for App Store review
     }
 
+    /// Whether to present an offer code after paywall dismiss.
+    /// Defaults to false (compliant baseline); server enables for engaged users.
+    /// Server-configured promo code to redeem on paywall dismiss (e.g. "RATEFREE").
+    /// Returns nil when not configured — StoreManager will skip the redeem-promo call.
+    public func dismissPromoCode() -> String? {
+        defaults.string(forKey: Keys.serverDismissPromoCode)
+    }
+
+    public func offerAfterDismissEnabled() -> Bool {
+        if defaults.object(forKey: Keys.serverOfferAfterDismiss) != nil {
+            return defaults.bool(forKey: Keys.serverOfferAfterDismiss)
+        }
+        return false
+    }
+
     /// Force showWinback for testing. Pass nil to clear.
     public func forceShowWinback(_ value: Bool?) {
         if let value {
@@ -184,6 +201,15 @@ public final class ExperimentManager: ObservableObject {
                 }
                 if let showWinback = json["showWinback"] as? Bool {
                     self.defaults.set(showWinback, forKey: Keys.serverShowWinback)
+                }
+                if let offerAfterDismiss = json["offerAfterDismiss"] as? Bool {
+                    self.defaults.set(offerAfterDismiss, forKey: Keys.serverOfferAfterDismiss)
+                    StoreManager.shared.offerAfterDismissEnabled = offerAfterDismiss
+                }
+                if let dismissPromoCode = json["dismissPromoCode"] as? String, !dismissPromoCode.isEmpty {
+                    self.defaults.set(dismissPromoCode, forKey: Keys.serverDismissPromoCode)
+                } else if json["dismissPromoCode"] is NSNull {
+                    self.defaults.removeObject(forKey: Keys.serverDismissPromoCode)
                 }
                 self.defaults.set(Date(), forKey: Keys.lastServerCheck)
             }
