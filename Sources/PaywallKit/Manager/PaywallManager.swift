@@ -11,7 +11,7 @@ public final class PaywallManager {
     private init() {
         let info = Bundle.main.infoDictionary
         self.apiBase = info?["PaywallKitAPIBase"] as? String
-            ?? "https://paywallkit-api-917362189743.us-central1.run.app"
+            ?? "https://paywallkit-api.fly.dev"
     }
 
     // MARK: - Event Tracking
